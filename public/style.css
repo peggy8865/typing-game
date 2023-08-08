@@ -1,0 +1,76 @@
+* {
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.container {
+  width: 64%;
+  padding-top: 10px;
+}
+
+p {
+  margin: 14px 5px;
+}
+
+.space {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+#words {
+  height: 300px;
+  margin: 0 5px;
+  padding: 3px 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+  overflow: auto;
+  line-height: 24px;
+  color: #A0A0A0;
+}
+
+.correct {
+  color: blue;
+}
+
+.wrong {
+  color: red;
+  background-color: yellow;
+  text-decoration: underline;
+}
+
+button {
+  display: inline-block;
+  margin: 10px 5px;
+  border: 3px outset;
+  border-radius: 5px;
+  line-height: 42px;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+button:hover {
+  cursor: pointer;
+  background: #E0E0E0;
+}
+
+button:active {
+  border: 2px outset;
+}
+
+.below-section {
+  display: flex;
+  align-items: center;
+}
+
+#switch {
+  margin-left: 12px;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+#comment {
+  margin-left: 20px;
+  color: red;
+  font-size: 21px;
+  font-weight: bold;
+}
