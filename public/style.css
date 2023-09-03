@@ -74,3 +74,13 @@ button:active {
   font-size: 21px;
   font-weight: bold;
 }
+
+form {
+  max-width: 500px;
+  border: 3px outset #80b0e0;
+  border-radius: 5px;
+}
+
+/* .test {
+  outline: 1px solid red;
+} */

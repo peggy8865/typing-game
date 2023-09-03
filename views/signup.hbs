@@ -1,0 +1,40 @@
+<div class="m-4 text-center">
+  <h1 class="h3 fw-bold mb-3">新 戶 註 冊</h1>
+</div>
+<form class="form-signup mx-auto" action="/signup" method="POST">
+  <div class="pe-5 pt-4">
+    <div class="mb-4 row">
+      <label for="name" class="col-sm-4 col-form-label text-end">名 稱</label>
+      <div class="col-sm-8">
+        <input type="text" id="name" name="name" class="form-control" placeholder="請設定您的使用者名稱" required autofocus>
+      </div>
+    </div>
+    <div class="mb-4 row">
+      <label for="email" class="col-sm-4 col-form-label text-end">信 箱</label>
+      <div class="col-sm-8">
+        <input type="text" id="email" name="email" class="form-control" placeholder="請輸入完整信箱" required>
+      </div>
+    </div>
+    <div class="mb-4 row">
+      <label for="password" class="col-sm-4 col-form-label text-end">密 碼</label>
+      <div class="col-sm-8">
+        <input type="password" id="password" name="password" class="form-control" placeholder="請設定6字元密碼" required>
+      </div>
+    </div>
+    <div class="mb-4 row">
+      <label for="passwordCheck" class="col-sm-4 col-form-label text-end">確認密碼</label>
+      <div class="col-sm-8">
+        <input type="password" id="passwordCheck" name="passwordCheck" class="form-control" placeholder="請再次輸入密碼"
+          required>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center pb-3">
+    <button class="btn btn-primary" type="submit">送出</button>
+  </div>
+</form>
+<div class="mt-3 text-center">
+  <p><a href="/signin" class="text-reset">我要登入</a></p>
+  <p><a href="/signin" class="text-reset">Facebook登入</a></p>
+  <p><a href="/signin" class="text-reset">Google登入</a></p>
+</div>
