@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User } = db
 const userController = {
@@ -5,13 +6,14 @@ const userController = {
     res.render('signup')
   },
   signUp: (req, res) => {
-    User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password
-    })
+    bcrypt.hash(req.body.password, 10)
+      .then(hash => User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: hash
+      }))
       .then(() => {
-        res.send('success signup')
+        res.redirect('/signin')
       })
   },
   signInPage: (req, res) => {
