@@ -7,5 +7,5 @@ module.exports = {
     }
     res.redirect('back')
     next(err)
-  }  
+  }
 }

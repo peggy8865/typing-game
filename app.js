@@ -3,14 +3,15 @@ const exphbs = require('express-handlebars')
 const session = require('express-session')
 const flash = require('connect-flash')
 const passport = require('./config/passport')
-const db = require('./models')
 const router = require('./routes')
+const handlebarsHelpers = require('./helpers/handlebars-helpers')
+const { getUser } = require('./helpers/auth-helpers')
 
 const app = express()
 const PORT = 3000
 const SESSION_SECRET = 'secret'
 
-app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', '.hbs')
 
 app.use(express.static('public'))
@@ -22,6 +23,7 @@ app.use(passport.session())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
+  res.locals.user = getUser(req)
   next()
 })
 app.use(router)
