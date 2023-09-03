@@ -8,6 +8,10 @@
   padding-top: 10px;
 }
 
+.alert {
+  max-width: 500px;
+}
+
 p {
   margin: 14px 5px;
 }
@@ -38,7 +42,7 @@ p {
   text-decoration: underline;
 }
 
-button {
+.typing-below-section > button {
   display: inline-block;
   margin: 10px 5px;
   border: 3px outset;
@@ -48,16 +52,16 @@ button {
   font-weight: bold;
 }
 
-button:hover {
+.typing-below-section > button:hover {
   cursor: pointer;
   background: #E0E0E0;
 }
 
-button:active {
+.typing-below-section > button:active {
   border: 2px outset;
 }
 
-.below-section {
+.typing-below-section {
   display: flex;
   align-items: center;
 }
