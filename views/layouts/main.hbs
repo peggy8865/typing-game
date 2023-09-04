@@ -13,20 +13,22 @@
   <header>
     <nav class="navbar navbar-expand-lg bg-light px-3">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">打字遊戲</a>
+        <a class="navbar-brand" href="/">打字遊戲</a>
         {{!-- TODO: hover to orange --}}
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="#">個人挑戰</a>
+          <a class="nav-link active" aria-current="page" href="/">個人挑戰</a>
           <a class="nav-link" href="#">雙人對戰</a>
           <a class="nav-link" href="#">排行榜</a>
           <a class="nav-link" href="#">討論版</a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/accounts/{{#if user}}{{user.id}}{{else}}null{{/if}}">
             <i class="fa-solid fa-user"></i>
             {{#if user}}
             {{user.name}}
             {{/if}}
           </a>
-          <a class="nav-link ms-2" href="/logout"><i class="fa-solid fa-right-from-bracket fa-lg"></i></a>
+          <a class="nav-link ms-2 {{#unless user}}disabled{{/unless}}" href="/logout">
+            <i class="fa-solid fa-right-from-bracket fa-lg"></i>
+          </a>
         </div>
       </div>
     </nav>
