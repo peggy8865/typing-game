@@ -12,6 +12,8 @@ router.post('/signin', passport.authenticate('local', { failureRedirect: '/signi
 router.get('/logout', userController.logout)
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }))
 router.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
+router.get('/login/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
+router.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: '/signin', failureMessage: true }), userController.signIn)
 
 router.get('/accounts/:id', authenticator, userController.accountPage)
 
