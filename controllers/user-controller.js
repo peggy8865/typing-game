@@ -43,7 +43,8 @@ const userController = {
     res.redirect('/signin')
   },
   accountPage: (req, res) => {
-    res.render('account')
+    // TODO: pass user records to hbs
+    res.render('users/account')
   }
 }
 module.exports = userController

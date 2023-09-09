@@ -85,6 +85,18 @@ form {
   border-radius: 5px;
 }
 
+.avatar {
+  width: 100%;
+}
+
+.user-info > th, .user-info > td {
+  width: 25%;
+}
+
+.denominator {
+  color: #878787;
+}
+
 /* .test {
   outline: 1px solid red;
 } */
