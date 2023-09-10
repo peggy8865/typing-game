@@ -10,11 +10,11 @@ module.exports = {
       },
       wpm: {
         allowNull: false,
-        type: Sequelize.DECIMAL
+        type: Sequelize.INTEGER
       },
       accuracyRate: {
         allowNull: false,
-        type: Sequelize.DECIMAL
+        type: Sequelize.INTEGER
       },
       UserId: {
         allowNull: false,

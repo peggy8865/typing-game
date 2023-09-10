@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Single.init({
-    wpm: DataTypes.DECIMAL(10, 2),
-    accuracyRate: DataTypes.DECIMAL(10, 2),
+    wpm: DataTypes.INTEGER,
+    accuracyRate: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
     sequelize,
