@@ -46,22 +46,26 @@ const userController = {
     res.redirect('/signin')
   },
   accountPage: (req, res) => {
-    sequelize.query(`
+    Promise.all([
+      sequelize.query(`
       SELECT tb2.*, (tb2.wpm*tb2.ar/100*10) AS score
       FROM
-      (SELECT tb1.wpm AS wpm, tb1.accuracyRate AS ar, tb1.UserId AS UserId, tb1.createdAt AS createdAt, MONTH(tb1.createdAt) AS createdMonth
+      (SELECT tb1.wpm AS wpm, tb1.accuracyRate AS ar, tb1.UserId AS UserId, DATE_FORMAT(tb1.createdAt, "%Y-%m-%d") AS createdDate, DATE_FORMAT(tb1.createdAt, "%T") AS createdTime, MONTH(tb1.createdAt) AS createdMonth
       FROM singles AS tb1
       WHERE MONTH(tb1.createdAt) > MONTH(CURDATE()) - ${BASE_MONTHS}
       ORDER BY tb1.UserId ASC, tb1.createdAt DESC)
       AS tb2;`
-    )
-      .then(records => {
+      ),
+      User.count({ raw: true })
+    ])
+      .then(([records, totalUsers]) => {
         const recordPerMonth = {}
         let bestRecord = {}
         const sumRecord = {}
 
         records[0].forEach(record => {
-          const { wpm, ar, UserId, score, createdAt, createdMonth } = record
+          const { wpm, ar, UserId, createdDate, createdTime, createdMonth } = record
+          const score = parseFloat(record.score)
           if (UserId === Number(req.params.id)) {
             // for activity degree analysis
             if (recordPerMonth[createdMonth]) {
@@ -71,7 +75,8 @@ const userController = {
             }
             // for best record
             if (!bestRecord.score || (bestRecord.score < score)) {
-              bestRecord = { wpm, ar, score, createdAt }
+              bestRecord = { wpm, ar, createdDate, createdTime }
+              bestRecord.score = parseFloat(score).toFixed(2)
             }
             // for average record calculation
             if (sumRecord[UserId] && (sumRecord[UserId].count < BASE_RECORDS)) {
@@ -94,18 +99,23 @@ const userController = {
             }
           }
         })
-        const avgRecord = {
-          wpm: sumRecord[req.params.id].wpm / BASE_RECORDS,
-          ar: sumRecord[req.params.id].ar / BASE_RECORDS,
-          score: sumRecord[req.params.id].score / BASE_RECORDS
+        const mySumRecord = sumRecord[req.params.id]
+        const myAvgRecord = {
+          wpm: mySumRecord ? mySumRecord.wpm / mySumRecord.count : 0,
+          ar: mySumRecord ? mySumRecord.ar / mySumRecord.count : 0,
+          score: mySumRecord ? parseFloat(mySumRecord.score / mySumRecord.count).toFixed(2) : 0
+        }
+        if (!mySumRecord) {
+          bestRecord = { wpm: 0, ar: 0, score: 0 }
         }
         let rank = 1
         for (const key in sumRecord) {
-          if (key !== req.params.id && sumRecord[key].score > avgRecord.score) {
+          const othersAvgScore = sumRecord[key].score / sumRecord[key].count
+          if (othersAvgScore > myAvgRecord.score) {
             rank++
           }
         }
-        res.render('users/account', { recordPerMonth, bestRecord, avgRecord, rank, account: true })
+        res.render('users/account', { recordPerMonth, myAvgRecord, bestRecord, rank, totalUsers, account: true })
       })
       .catch(err => console.log(err))
   }

@@ -22,10 +22,10 @@
       </thead>
       <tbody>
         <tr>
-          <td class="col-2 align-middle">{{avgRecord.wpm}}</td>
-          <td class="col-2 align-middle">{{avgRecord.ar}} %</td>
-          <td class="col-2 align-middle">{{avgRecord.score}}</td>
-          <td class="col-2 align-middle">{{rank}} <span class="denominator">/20</span></td>
+          <td class="col-2 align-middle">{{myAvgRecord.wpm}}</td>
+          <td class="col-2 align-middle">{{myAvgRecord.ar}} %</td>
+          <td class="col-2 align-middle">{{myAvgRecord.score}}</td>
+          <td class="col-2 align-middle">{{rank}} <span class="denominator">/{{totalUsers}}</span></td>
         </tr>
       </tbody>
     </table>
@@ -44,7 +44,13 @@
           <td class="col-2 align-middle">{{bestRecord.wpm}}</td>
           <td class="col-2 align-middle">{{bestRecord.ar}} %</td>
           <td class="col-2 align-middle">{{bestRecord.score}}</td>
-          <td class="col-2 align-middle">{{bestRecord.createdAt}}</td>
+          <td class="col-2 align-middle">
+            {{#if bestRecord.createdDate}}
+            {{bestRecord.createdDate}}<br>{{bestRecord.createdTime}}
+            {{else}}
+            -
+            {{/if}}
+            </td>
         </tr>
       </tbody>
     </table>
