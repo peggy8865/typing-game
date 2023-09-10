@@ -101,8 +101,8 @@ const userController = {
         })
         const mySumRecord = sumRecord[req.params.id]
         const myAvgRecord = {
-          wpm: mySumRecord ? mySumRecord.wpm / mySumRecord.count : 0,
-          ar: mySumRecord ? mySumRecord.ar / mySumRecord.count : 0,
+          wpm: mySumRecord ? parseFloat(mySumRecord.wpm / mySumRecord.count).toFixed(2) : 0,
+          ar: mySumRecord ? parseFloat(mySumRecord.ar / mySumRecord.count).toFixed(2) : 0,
           score: mySumRecord ? parseFloat(mySumRecord.score / mySumRecord.count).toFixed(2) : 0
         }
         if (!mySumRecord) {
