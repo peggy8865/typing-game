@@ -44,7 +44,7 @@ function typeAChar (e) {
   }
   currentSpan = document.getElementById(id)
   if (!currentSpan) {
-    giveResult()
+    sendResult()
     return
   }
   if (id % 720 === 0 && id !== 0) {
@@ -102,21 +102,22 @@ function giveComment (aWPM, aAR) {
     return 'Good job!!'
   }
 }
-function giveResult () {
+function sendResult () {
   clearInterval(timerID)
   timerID = null
   const aWPM = calWPM()
   const aAR = calAccuracyRate()
   const aComment = giveComment(aWPM, aAR)
-  WPM.textContent = aWPM
-  AR.textContent = aAR
-  comment.textContent = aComment
+  document.getElementById('wpm-input').value = aWPM
+  document.getElementById('ar-input').value = aAR
+  document.getElementById('comment-input').value = aComment
+  document.getElementById('single-record-submit').click()
 }
 function setTimer () {
   timerID = setInterval(function () {
     timer.textContent -= 1
     if (timer.textContent === '0') {
-      giveResult()
+      sendResult()
     }
   }, 1000)
 }

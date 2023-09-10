@@ -22,14 +22,14 @@
       </thead>
       <tbody>
         <tr>
-          <td class="col-2 align-middle">50</td>
-          <td class="col-2 align-middle">100 %</td>
-          <td class="col-2 align-middle">500</td>
-          <td class="col-2 align-middle">1 <span class="denominator">/20</span></td>
+          <td class="col-2 align-middle">{{avgRecord.wpm}}</td>
+          <td class="col-2 align-middle">{{avgRecord.ar}} %</td>
+          <td class="col-2 align-middle">{{avgRecord.score}}</td>
+          <td class="col-2 align-middle">{{rank}} <span class="denominator">/20</span></td>
         </tr>
       </tbody>
     </table>
-    <h5 class="mb-3">最佳表現:</h5>
+    <h5 class="mb-3">最佳表現: <span>(以最近6個月紀錄為基準)</span></h5>
     <table class="table table-light mb-3 text-center">
       <thead class="table-primary">
         <tr>
@@ -41,10 +41,10 @@
       </thead>
       <tbody>
         <tr>
-          <td class="col-2 align-middle">50</td>
-          <td class="col-2 align-middle">100 %</td>
-          <td class="col-2 align-middle">500</td>
-          <td class="col-2 align-middle">2023/8/20<br>9:00 PM</td>
+          <td class="col-2 align-middle">{{bestRecord.wpm}}</td>
+          <td class="col-2 align-middle">{{bestRecord.ar}} %</td>
+          <td class="col-2 align-middle">{{bestRecord.score}}</td>
+          <td class="col-2 align-middle">{{bestRecord.createdAt}}</td>
         </tr>
       </tbody>
     </table>

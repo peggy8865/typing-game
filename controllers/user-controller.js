@@ -1,7 +1,10 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { Op } = require('sequelize')
-const { User } = db
+const { User, sequelize } = db
+const BASE_RECORDS = 10
+const BASE_MONTHS = 6
+
 const userController = {
   signUpPage: (req, res) => {
     res.render('signup')
@@ -43,8 +46,68 @@ const userController = {
     res.redirect('/signin')
   },
   accountPage: (req, res) => {
-    // TODO: pass user records to hbs
-    res.render('users/account')
+    sequelize.query(`
+      SELECT tb2.*, (tb2.wpm*tb2.ar/100*10) AS score
+      FROM
+      (SELECT tb1.wpm AS wpm, tb1.accuracyRate AS ar, tb1.UserId AS UserId, tb1.createdAt AS createdAt, MONTH(tb1.createdAt) AS createdMonth
+      FROM singles AS tb1
+      WHERE MONTH(tb1.createdAt) > MONTH(CURDATE()) - ${BASE_MONTHS}
+      ORDER BY tb1.UserId ASC, tb1.createdAt DESC)
+      AS tb2;`
+    )
+      .then(records => {
+        const recordPerMonth = {}
+        let bestRecord = {}
+        const sumRecord = {}
+
+        records[0].forEach(record => {
+          const { wpm, ar, UserId, score, createdAt, createdMonth } = record
+          if (UserId === Number(req.params.id)) {
+            // for activity degree analysis
+            if (recordPerMonth[createdMonth]) {
+              recordPerMonth[createdMonth] += 1
+            } else {
+              recordPerMonth[createdMonth] = 1
+            }
+            // for best record
+            if (!bestRecord.score || (bestRecord.score < score)) {
+              bestRecord = { wpm, ar, score, createdAt }
+            }
+            // for average record calculation
+            if (sumRecord[UserId] && (sumRecord[UserId].count < BASE_RECORDS)) {
+              sumRecord[UserId].wpm += wpm
+              sumRecord[UserId].ar += ar
+              sumRecord[UserId].score += score
+              sumRecord[UserId].count += 1
+            } else if (!sumRecord[UserId]) {
+              sumRecord[UserId] = { wpm, ar, score, count: 1 }
+            }
+          } else {
+            // for ranking
+            if (sumRecord[UserId] && (sumRecord[UserId].count < BASE_RECORDS)) {
+              sumRecord[UserId].wpm += wpm
+              sumRecord[UserId].ar += ar
+              sumRecord[UserId].score += score
+              sumRecord[UserId].count += 1
+            } else if (!sumRecord[UserId]) {
+              sumRecord[UserId] = { wpm, ar, score, count: 1 }
+            }
+          }
+        })
+        const avgRecord = {
+          wpm: sumRecord[req.params.id].wpm / BASE_RECORDS,
+          ar: sumRecord[req.params.id].ar / BASE_RECORDS,
+          score: sumRecord[req.params.id].score / BASE_RECORDS
+        }
+        let rank = 1
+        for (const key in sumRecord) {
+          if (key !== req.params.id && sumRecord[key].score > avgRecord.score) {
+            rank++
+          }
+        }
+        res.render('users/account', { recordPerMonth, bestRecord, avgRecord, rank, account: true })
+      })
+      .catch(err => console.log(err))
   }
 }
 module.exports = userController

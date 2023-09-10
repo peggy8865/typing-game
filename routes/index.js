@@ -2,8 +2,11 @@ const express = require('express')
 const router = express.Router()
 const passport = require('../config/passport')
 const userController = require('../controllers/user-controller')
+const recordController = require('../controllers/record-controller')
 const { authenticator } = require('../middleware/auth')
 const { generalErrorHandler } = require('../middleware/error-handler')
+
+router.post('/singles/record', recordController.saveSingleRecord)
 
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
@@ -17,7 +20,7 @@ router.get('/oauth2/redirect/google', passport.authenticate('google', { failureR
 
 router.get('/accounts/:id', authenticator, userController.accountPage)
 
-router.use('/', (req, res) => res.render('index'))
+router.get('/', (req, res) => res.render('index', { index: true }))
 router.use('/', generalErrorHandler)
 
 module.exports = router
