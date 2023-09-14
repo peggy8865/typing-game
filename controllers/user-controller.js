@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { Op } = require('sequelize')
 const { User, sequelize } = db
+const ADD_TIME = '08:00:00' // show the time in 'UTC+8:00'
 const BASE_RECORDS = 10
 const BASE_MONTHS = 6
 
@@ -48,14 +49,20 @@ const userController = {
   accountPage: (req, res) => {
     Promise.all([
       sequelize.query(`
-      SELECT tb2.*, (tb2.wpm*tb2.ar/100*10) AS score
-      FROM
-      (SELECT tb1.wpm AS wpm, tb1.accuracyRate AS ar, tb1.UserId AS UserId, DATE_FORMAT(tb1.createdAt, "%Y-%m-%d") AS createdDate, DATE_FORMAT(tb1.createdAt, "%T") AS createdTime, MONTH(tb1.createdAt) AS createdMonth
-      FROM singles AS tb1
-      WHERE MONTH(tb1.createdAt) > MONTH(CURDATE()) - ${BASE_MONTHS}
-      ORDER BY tb1.UserId ASC, tb1.createdAt DESC)
-      AS tb2;`
-      ),
+      SELECT
+      tb1.*, (tb1.wpm*tb1.ar/100*10) AS score,
+      DATE_FORMAT(tb1.createdAtLocal, "%Y-%m-%d") AS createdDate,
+      DATE_FORMAT(tb1.createdAtLocal, "%T") AS createdTime,
+      DATE_FORMAT(tb1.createdAtLocal, "%b") AS createdMonth
+      FROM (SELECT
+        tb0.wpm AS wpm,
+        tb0.accuracyRate AS ar,
+        tb0.UserId AS UserId,
+        ADDTIME(tb0.createdAt, '${ADD_TIME}') AS createdAtLocal
+        FROM singles AS tb0
+        WHERE MONTH(tb0.createdAt) > MONTH(CURDATE()) - ${BASE_MONTHS}
+        ORDER BY tb0.UserId ASC, tb0.createdAt DESC)
+      AS tb1;`),
       User.count({ raw: true })
     ])
       .then(([records, totalUsers]) => {
@@ -115,6 +122,7 @@ const userController = {
             rank++
           }
         }
+        console.log(recordPerMonth)
         res.render('users/account', { recordPerMonth, myAvgRecord, bestRecord, rank, totalUsers, account: true })
       })
       .catch(err => console.log(err))
