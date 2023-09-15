@@ -7,6 +7,7 @@ const { authenticator } = require('../middleware/auth')
 const { generalErrorHandler } = require('../middleware/error-handler')
 
 router.post('/singles/record', recordController.saveSingleRecord)
+router.get('/ranks', recordController.rankPage)
 
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)

@@ -93,8 +93,12 @@ form {
   width: 25%;
 }
 
-.denominator {
+.denominator, .footnote {
   color: #878787;
+}
+
+.rank-info {
+  max-width: 90%;
 }
 
 /* .test {

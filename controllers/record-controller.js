@@ -16,6 +16,9 @@ const recordController = {
         .catch(err => console.log(err))
     }
     res.render('index', { wpm, ar, comment, index: true })
+  },
+  rankPage: (req, res) => {
+    res.render('rank')
   }
 }
 module.exports = recordController
