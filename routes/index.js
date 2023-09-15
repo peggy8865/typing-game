@@ -21,6 +21,7 @@ router.get('/oauth2/redirect/google', passport.authenticate('google', { failureR
 router.get('/accounts/:id', authenticator, userController.accountPage)
 
 router.get('/', (req, res) => res.render('index', { index: true }))
+router.use('/', (req, res) => res.redirect('/'))
 router.use('/', generalErrorHandler)
 
 module.exports = router

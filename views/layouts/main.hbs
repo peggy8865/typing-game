@@ -44,6 +44,7 @@
       <span class="text-muted">© 2023 - {{ currentYear }}</span>
     </div>
   </footer>
+  {{> modals}}
 
   <script src="https://kit.fontawesome.com/3f40426973.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -52,6 +53,7 @@
   {{#if index}}
   <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
   <script src="/typing.js"></script>
+  <script src="/modal.js"></script>
   {{/if}}
   {{#if account}}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
