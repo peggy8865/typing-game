@@ -19,6 +19,9 @@ const recordController = {
   },
   rankPage: (req, res) => {
     res.render('rank')
+  },
+  battlePage: (req, res) => {
+    res.render('battle')
   }
 }
 module.exports = recordController
