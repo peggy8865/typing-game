@@ -1,79 +1,60 @@
 <div class="rank-info mt-3 mx-auto">
-  <h4 class="mb-3">積分排行:</h4>
-  <table class="table table-light mb-4 text-center">
-    <thead class="table-primary">
-      <tr>
-        <th class="col-2">Rank</th>
-        <th class="col-2">Name</th>
-        <th class="col-2">WPM</th>
-        <th class="col-2">Accuracy Rate</th>
-        <th class="col-2">Score</th>
-        <th class="col-2">Time</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{!-- {{#each}} --}}
-      <tr>
-        <td class="col-2 align-middle">1</td>
-        <td class="col-2 align-middle">Kate</td>
-        <td class="col-2 align-middle">66</td>
-        <td class="col-2 align-middle">100 %</td>
-        <td class="col-2 align-middle">660</td>
-        <td class="col-2 align-middle">
-          2023-9-16<br>09:00 AM
-        </td>
-      </tr>
-      {{!-- {{/each}} --}}
-      <tr>
-        <td class="col-2 align-middle">2</td>
-        <td class="col-2 align-middle">Daisy</td>
-        <td class="col-2 align-middle">60</td>
-        <td class="col-2 align-middle">99 %</td>
-        <td class="col-2 align-middle">594</td>
-        <td class="col-2 align-middle">
-          2023-9-06<br>11:05 AM
-        </td>
-      </tr>
-      <tr>
-        <td class="col-2 align-middle">3</td>
-        <td class="col-2 align-middle">Johnson</td>
-        <td class="col-2 align-middle">51</td>
-        <td class="col-2 align-middle">100 %</td>
-        <td class="col-2 align-middle">510</td>
-        <td class="col-2 align-middle">
-          2023-9-11<br>00:29 AM
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h4 class="mb-3">本月活躍排行:</h4>
-  <table class="table table-light mb-3 text-center">
-    <thead class="table-primary">
-      <tr>
-        <th class="col-2">Rank</th>
-        <th class="col-5">Name</th>
-        <th class="col-5">Usage<span class="footnote">(打字次數)</span></th>
-      </tr>
-    </thead>
-    <tbody>
-      {{!-- {{#each}} --}}
-      <tr>
-        <td class="col-2 align-middle">1</td>
-        <td class="col-5 align-middle">Kate</td>
-        <td class="col-5 align-middle">301</td>
-      </tr>
-      {{!-- {{/each}} --}}
-      <tr>
-        <td class="col-2 align-middle">2</td>
-        <td class="col-5 align-middle">Johnson</td>
-        <td class="col-5 align-middle">295</td>
-      </tr>
-      <tr>
-        <td class="col-2 align-middle">3</td>
-        <td class="col-5 align-middle">Daisy</td>
-        <td class="col-5 align-middle">13</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#score-tab" type="button" role="tab"
+        aria-controls="score-tab-pane" aria-selected="true">積分排行</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activity-tab" type="button" role="tab"
+        aria-controls="activity-tab-pane" aria-selected="false">本月活躍排行</button>
+    </li>
+  </ul>
+  <div class="tab-content mt-3">
+    <div class="tab-pane fade show active" id="score-tab" role="tabpanel" aria-labelledby="score-tab" tabindex="0">
+      <table class="table table-light mb-4 text-center">
+        <thead class="table-primary">
+          <tr>
+            <th class="col-2">Rank</th>
+            <th class="col-2">Name</th>
+            <th class="col-2">WPM</th>
+            <th class="col-2">Accuracy Rate</th>
+            <th class="col-2">Score</th>
+            <th class="col-2">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each singlesWithScore}}
+          <tr>
+            <td class="col-2 align-middle">{{#plusOne @index}}{{/plusOne}}</td>
+            <td class="col-2 align-middle">{{this.name}}</td>
+            <td class="col-2 align-middle">{{this.wpm}}</td>
+            <td class="col-2 align-middle">{{this.accuracyRate}} %</td>
+            <td class="col-2 align-middle">{{this.score}}</td>
+            <td class="col-2 align-middle">{{{this.createdDateTime}}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="tab-pane fade" id="activity-tab" role="tabpanel" aria-labelledby="activity-tab" tabindex="0">
+      <table class="table table-light mb-3 text-center">
+        <thead class="table-primary">
+          <tr>
+            <th class="col-2">Rank</th>
+            <th class="col-5">Name</th>
+            <th class="col-5">Usage<span class="footnote">(打字次數)</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each singlesWithUsage}}
+          <tr>
+            <td class="col-2 align-middle">{{#plusOne @index}}{{/plusOne}}</td>
+            <td class="col-5 align-middle">{{this.name}}</td>
+            <td class="col-5 align-middle">{{this.monthlyUsage}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
