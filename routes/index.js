@@ -11,6 +11,7 @@ const upload = require('../middleware/multer')
 router.post('/singles/record', recordController.saveSingleRecord)
 router.get('/battles', recordController.battlePage)
 router.get('/ranks', recordController.rankPage)
+router.post('/posts', postController.createPost)
 router.get('/posts', postController.postPage)
 
 router.get('/signup', userController.signUpPage)
