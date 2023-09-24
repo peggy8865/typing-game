@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { Op } = require('sequelize')
+const { getUser } = require('../helpers/auth-helpers')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 const { User, sequelize } = db
 const ADD_TIME = '08:00:00' // show the time in 'UTC+8:00'
 const BASE_RECORDS = 10
@@ -63,9 +65,14 @@ const userController = {
         WHERE MONTH(tb0.createdAt) > MONTH(CURDATE()) - ${BASE_MONTHS}
         ORDER BY tb0.UserId ASC, tb0.createdAt DESC)
       AS tb1;`),
-      User.count({ raw: true })
+      User.count({ raw: true }),
+      User.findOne({
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+        where: { id: req.params.id },
+        raw: true
+      })
     ])
-      .then(([records, totalUsers]) => {
+      .then(([records, totalUsers, theUser]) => {
         const recordPerMonth = {}
         let bestRecord = {}
         const sumRecord = {}
@@ -122,10 +129,54 @@ const userController = {
             rank++
           }
         }
-        console.log(recordPerMonth)
-        res.render('users/account', { recordPerMonth, myAvgRecord, bestRecord, rank, totalUsers, account: true })
+        res.render('users/account', {
+          recordPerMonth,
+          myAvgRecord,
+          bestRecord,
+          rank,
+          totalUsers,
+          theUser,
+          account: true,
+          isMyself: getUser(req).id === Number(req.params.id)
+        })
       })
       .catch(err => console.log(err))
+  },
+  editAccountPage: (req, res) => {
+    res.render('users/edit', { edit: true })
+  },
+  editAccount: (req, res, next) => {
+    const id = req.params.id
+    const { name, email, introduction } = req.body
+    if (!name || !email) throw new Error('名稱、信箱為必填欄位')
+    const file = req.file
+    User.findOne({
+      where: {
+        id: { [Op.ne]: id },
+        [Op.or]: [{ name }, { email }]
+      }
+    })
+      .then(user => {
+        if (user) throw new Error('名稱或信箱已有人使用')
+        Promise.all([
+          User.findByPk(id),
+          imgurFileHandler(file)
+        ])
+          .then(([user, filePath]) => {
+            if (!user) throw new Error('此用戶不存在')
+            return user.update({
+              name,
+              email,
+              avatar: filePath || user.avatar,
+              introduction
+            })
+          })
+          .then(() => {
+            req.flash('success_messages', '個人設定已更新')
+            res.redirect(`/accounts/${id}`)
+          })
+      })
+      .catch(err => next(err))
   }
 }
 module.exports = userController

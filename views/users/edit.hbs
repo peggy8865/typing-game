@@ -1,0 +1,38 @@
+<form action="/accounts/{{user.id}}?_method=PUT" method="POST" enctype="multipart/form-data"
+  class="form-account-edit mx-auto pe-5 pt-4">
+  <div>
+    <div class="mb-4 row">
+      <label for="avatar" class="col-sm-4 col-form-label text-end">更換頭貼</label>
+      <img src={{user.avatar}} alt="avatar" id="preview-avatar" class="col-sm-6 mb-5">
+      <div class="col-sm-2">
+        <span class="form-text">(點擊圖片更換)</span>
+        <input type="file" id="avatar" name="avatar" accept="image/*" class="form-control" />
+      </div>
+    </div>
+    <div class="mb-4 row">
+      <label for="name" class="col-sm-4 col-form-label text-end">名 稱</label>
+      <div class="col-sm-8">
+        <input type="text" id="name" name="name" class="form-control" value="{{user.name}}" required autofocus>
+      </div>
+    </div>
+    <div class="mb-4 row">
+      <label for="email" class="col-sm-4 col-form-label text-end">信 箱</label>
+      <div class="col-sm-8">
+        <input type="email" id="email" name="email" class="form-control" value="{{user.email}}" required>
+      </div>
+    </div>
+    <div class="mb-4 row">
+      <label for="introduction" class="col-sm-4 col-form-label text-end">簡 介</label>
+      <div class="col-sm-8">
+        <textarea id="introduction" name="introduction" class="form-control"
+          maxlength="1000">{{user.introduction}}</textarea>
+        <p class="form-text">(字數上限為 1000 字元)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-primary" type="submit">儲存</button>
+    <a href="javascript:history.back()" class="btn btn-secondary ms-3" type="button">取消</a>
+  </div>
+</form>

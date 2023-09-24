@@ -79,7 +79,7 @@ p {
   font-weight: bold;
 }
 
-form {
+.form-signin, .form-signup {
   max-width: 500px;
   border: 3px outset #80b0e0;
   border-radius: 5px;
@@ -99,6 +99,30 @@ form {
 
 .rank-info {
   max-width: 90%;
+}
+
+.form-account-edit {
+  max-width: 85%;
+}
+
+input[type="file"]#avatar {
+  width: 1px;
+  height: 1px;
+  display: none;
+}
+
+#introduction {
+  height: 100px;
+}
+
+#preview-avatar {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+#preview-avatar:hover {
+  cursor: pointer;
+  opacity: 0.5;
 }
 
 /* .test {

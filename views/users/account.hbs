@@ -1,14 +1,16 @@
 <div class="row mt-3">
   <div class="col-4">
     <div class="d-flex flex-column align-items-center">
-      <img class="avatar mb-5" src={{user.avatar}} alt="avatar">
-      <a href="#" class="btn btn-outline-warning btn-sm mb-3">個 人 設 定</a>
+      <img class="avatar mb-5" src={{theUser.avatar}} alt="avatar">
+      {{#if isMyself}}
+      <a href="/accounts/{{theUser.id}}/edit" class="btn btn-outline-warning btn-sm mb-3">個 人 設 定</a>
       <a href="#" class="btn btn-outline-warning btn-sm">重 設 密 碼</a>
+      {{/if}}
     </div>
   </div>
   <div class="col-8 ps-5 user-info">
-    <h1 class="mb-3">{{user.name}}</h1>
-    <p id="introduction">{{user.introduction}}</p>
+    <h1 class="mb-3">{{theUser.name}}</h1>
+    <p>{{theUser.introduction}}</p>
     <hr>
     <h5 class="mb-3">平均表現: <span>(以最新10筆紀錄為基準)</span></h5>
     <table class="table table-light mb-3 text-center">
