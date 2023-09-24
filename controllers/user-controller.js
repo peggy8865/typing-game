@@ -172,8 +172,31 @@ const userController = {
             })
           })
           .then(() => {
-            req.flash('success_messages', '個人設定已更新')
+            req.flash('success_messages', '個人設定已更新！')
             res.redirect(`/accounts/${id}`)
+          })
+      })
+      .catch(err => next(err))
+  },
+  editPassword: (req, res, next) => {
+    const id = req.params.id
+    const { password, newPassword, checkNewPassword } = req.body
+    User.findByPk(id)
+      .then(user => {
+        if (!user) throw new Error('此用戶不存在')
+        return bcrypt.compare(password, user.password)
+          .then(isMatch => {
+            if (!isMatch) throw new Error('密碼錯誤')
+            if (newPassword !== checkNewPassword) throw new Error('新密碼兩次輸入不一致')
+            return bcrypt.hash(newPassword, 10)
+              .then(hash => {
+                return user.update({ password: hash })
+              })
+              .then(() => {
+                req.flash('success_messages', '密碼已更新！')
+                res.redirect(`/accounts/${id}`)
+              })
+              .catch(err => next(err))
           })
       })
       .catch(err => next(err))

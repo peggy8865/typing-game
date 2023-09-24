@@ -23,6 +23,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', { failur
 router.get('/login/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
 router.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: '/signin', failureMessage: true }), userController.signIn)
 
+router.put('/accounts/:id/password', userController.editPassword)
 router.put('/accounts/:id', upload.single('avatar'), userController.editAccount)
 router.get('/accounts/:id/edit', authenticator, userController.editAccountPage)
 router.get('/accounts/:id', authenticator, userController.accountPage)
