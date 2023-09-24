@@ -40,7 +40,7 @@ passport.use(new FacebookStrategy({
     defaults: {
       name,
       email,
-      password: bcrypt.hash(Math.random().toString(36).slice(-8), 10)
+      password: bcrypt.hash(Math.random().toString(36).slice(-5), 10)
     }
   })
     .then(([user, created]) => cb(null, user))
@@ -58,7 +58,7 @@ passport.use(new GoogleStrategy({
   User.findOne({ where: { email } })
     .then(user => {
       if (user) return cb(null, user)
-      const randomPassword = Math.random().toString(36).slice(-8)
+      const randomPassword = Math.random().toString(36).slice(-5)
       return bcrypt.hash(randomPassword, 10).then(hash => {
         User.create({
           name,

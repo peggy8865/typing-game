@@ -186,7 +186,7 @@ const userController = {
         if (!user) throw new Error('此用戶不存在')
         return bcrypt.compare(password, user.password)
           .then(isMatch => {
-            if (!isMatch) throw new Error('密碼錯誤')
+            if (!isMatch) throw new Error('密碼錯誤 (如透過第三方登入無需重設密碼)')
             if (newPassword !== checkNewPassword) throw new Error('新密碼兩次輸入不一致')
             return bcrypt.hash(newPassword, 10)
               .then(hash => {
