@@ -22,6 +22,7 @@ const recordController = {
     Promise.all([
       Single.findAll({
         attributes: [
+          ['UserId', 'userId'],
           [sequelize.col('user.name'), 'name'],
           'wpm',
           'accuracyRate',
@@ -39,6 +40,7 @@ const recordController = {
       }),
       Single.findAll({
         attributes: [
+          ['UserId', 'userId'],
           [sequelize.col('user.name'), 'name'],
           [sequelize.fn('COUNT', sequelize.col('UserId')), 'monthlyUsage']
         ],

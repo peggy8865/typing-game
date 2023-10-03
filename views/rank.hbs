@@ -26,7 +26,11 @@
           {{#each singlesWithScore}}
           <tr>
             <td class="col-2 align-middle">{{#plusOne @index}}{{/plusOne}}</td>
-            <td class="col-2 align-middle">{{this.name}}</td>
+            <td class="col-2 align-middle">
+              <a href="/accounts/{{this.userId}}"
+                class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{this.name}}
+              </a>
+            </td>
             <td class="col-2 align-middle">{{this.wpm}}</td>
             <td class="col-2 align-middle">{{this.accuracyRate}} %</td>
             <td class="col-2 align-middle">{{this.score}}</td>
@@ -49,7 +53,11 @@
           {{#each singlesWithUsage}}
           <tr>
             <td class="col-2 align-middle">{{#plusOne @index}}{{/plusOne}}</td>
-            <td class="col-5 align-middle">{{this.name}}</td>
+            <td class="col-5 align-middle">
+              <a href="/accounts/{{this.userId}}"
+                class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{this.name}}
+              </a>
+            </td>
             <td class="col-5 align-middle">{{this.monthlyUsage}}</td>
           </tr>
           {{/each}}
