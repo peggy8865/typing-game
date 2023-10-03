@@ -147,6 +147,7 @@ const userController = {
   },
   editAccount: (req, res, next) => {
     const id = req.params.id
+    if (Number(id) !== getUser(req).id) throw new Error('非用戶本人不得更改') // 基本上不會用到
     const { name, email, introduction } = req.body
     if (!name || !email) throw new Error('名稱、信箱為必填欄位')
     const file = req.file
@@ -158,28 +159,29 @@ const userController = {
     })
       .then(user => {
         if (user) throw new Error('名稱或信箱已有人使用')
-        Promise.all([
+        return Promise.all([
           User.findByPk(id),
           imgurFileHandler(file)
         ])
-          .then(([user, filePath]) => {
-            if (!user) throw new Error('此用戶不存在')
-            return user.update({
-              name,
-              email,
-              avatar: filePath || user.avatar,
-              introduction
-            })
-          })
-          .then(() => {
-            req.flash('success_messages', '個人設定已更新！')
-            res.redirect(`/accounts/${id}`)
-          })
+      })
+      .then(([user, filePath]) => {
+        if (!user) throw new Error('此用戶不存在')
+        return user.update({
+          name,
+          email,
+          avatar: filePath || user.avatar,
+          introduction
+        })
+      })
+      .then(() => {
+        req.flash('success_messages', '個人設定已更新！')
+        res.redirect(`/accounts/${id}`)
       })
       .catch(err => next(err))
   },
   editPassword: (req, res, next) => {
     const id = req.params.id
+    if (Number(id) !== getUser(req).id) throw new Error('非用戶本人不得更改') // 基本上不會用到
     const { password, newPassword, checkNewPassword } = req.body
     User.findByPk(id)
       .then(user => {
@@ -189,15 +191,15 @@ const userController = {
             if (!isMatch) throw new Error('密碼錯誤 (如透過第三方登入無需重設密碼)')
             if (newPassword !== checkNewPassword) throw new Error('新密碼兩次輸入不一致')
             return bcrypt.hash(newPassword, 10)
-              .then(hash => {
-                return user.update({ password: hash })
-              })
-              .then(() => {
-                req.flash('success_messages', '密碼已更新！')
-                res.redirect(`/accounts/${id}`)
-              })
-              .catch(err => next(err))
           })
+          .then(hash => {
+            return user.update({ password: hash })
+          })
+          .then(() => {
+            req.flash('success_messages', '密碼已更新！')
+            res.redirect(`/accounts/${id}`)
+          })
+          .catch(err => next(err))
       })
       .catch(err => next(err))
   }
