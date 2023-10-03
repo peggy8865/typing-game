@@ -1,3 +1,8 @@
+html {
+  /* width: 100vw; */
+  scrollbar-gutter: stable;
+}
+
 * {
   font-family: monospace;
   font-size: 16px;
@@ -129,6 +134,50 @@ input[type="file"]#avatar {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
+}
+
+textarea, .post-body > p, .reply-body > p {
+  white-space: pre-wrap;
+}
+
+.created-time, .updated-time {
+  font-size: 16px;
+  color:#878787;
+}
+
+.post-body {
+  margin-bottom: 50px;
+}
+
+.post-reply {
+  border: 1px solid #878787;
+}
+
+.my-reply {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.reply-owner > .img-section {
+  max-width: 50px;
+}
+
+#edit-button, #delete-button {
+  border: none;
+  background: none;
+}
+
+#edit-button:hover {
+  background-color: #495057;
+  color: #ffffff;
+}
+
+#delete-button:hover {
+  background-color: #c71c22;
+  color: #ffffff !important;
+}
+
+.hidden {
+  display: none;
 }
 
 /* .test {
