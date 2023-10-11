@@ -5,18 +5,19 @@ const ADD_TIME = '08:00:00' // show the time in 'UTC+8:00'
 
 const recordController = {
   saveSingleRecord: (req, res) => {
-    const { wpm, ar, comment } = req.body
-    if (getUser(req) && wpm !== Infinity && ar !== Infinity) {
-      const UserId = getUser(req).id
-      return Single.create({
-        wpm,
-        accuracyRate: ar,
-        UserId
-      })
-        .then(() => res.render('index', { wpm, ar, comment, index: true }))
-        .catch(err => console.log(err))
-    }
-    res.render('index', { wpm, ar, comment, index: true })
+    let { wpm, ar } = req.body
+    const userId = getUser(req)?.id
+    if (!userId) throw new Error('登入驗證無效')
+    wpm = (wpm === Infinity) ? 0 : wpm
+    ar = (ar === Infinity) ? 0 : ar
+
+    return Single.create({
+      wpm,
+      accuracyRate: ar,
+      UserId: userId
+    })
+      .then(() => res.redirect('/'))
+      .catch(err => console.log(err))
   },
   rankPage: (req, res) => {
     Promise.all([

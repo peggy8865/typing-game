@@ -1,19 +1,40 @@
 {{#if index}}
-<div class="modal fade" id="greeting-modal" tabindex="-1" aria-labelledby="greeting-modal" aria-hidden="true">
+<div class="modal fade" id="greetingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="greetingModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-light">
         <h5 class="modal-title fw-bold">歡迎光臨★打字遊戲★</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p>您可以訪客身分進行遊戲體驗</p>
         <p>加入會員即可儲存遊戲紀錄並享有更多功能哦！</p>
       </div>
       <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">暫時不要:O</button>
+        <button class="btn btn-secondary" data-bs-target="#instructionModal" data-bs-toggle="modal">暫時不要:O</button>
         <a href="/signup" class="btn btn-primary">註冊會員:D</a>
         <a href="/signin" class="btn btn-primary">會員登入XD</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="instructionModal" aria-hidden="true" aria-labelledby="instructionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold">遊戲說明</h5>
+      </div>
+      <div class="modal-body">
+        <p class="mb-0">畫面中為試打內容, 按下任意鍵即開始, 打完後再按下任意鍵即結束, 點擊下方「Switch Text」將切換到正式內容, 規則如下：</p>
+        <ol>
+          <li>打字時間 1 分鐘, 按下任意鍵即開始計時。</li>
+          <li>如要重新開始請點擊下方「Reset」。</li>
+          <li>更換打字題目請點擊下方「Switch Text」。</li>
+        </ol>
+      </div>
+      <div class="modal-footer bg-light">
+        <button class="btn btn-primary" data-bs-dismiss="modal">我知道了;D</button>
       </div>
     </div>
   </div>

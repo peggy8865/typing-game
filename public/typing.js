@@ -8,11 +8,14 @@ const switchBtn = document.getElementById('switch')
 const WPM = document.querySelector('.WPM')
 const AR = document.querySelector('.AR')
 const comment = document.getElementById('comment')
+const greetingModal = document.getElementById('greetingModal')
+const instructionModal = document.getElementById('instructionModal')
 let id = 0
 let currentSpan
 let list
 let keydownTimes = 0
 let timerID
+let typeAllowed = true
 
 function text2HTML (text) {
   let htmlText = ''
@@ -35,6 +38,7 @@ function text2HTML (text) {
         htmlText += `<span id="${i}" class="inwords">${e}</span>`
       }
     })
+    htmlText += '<p id="testText" hidden></p>'
   }
   words.innerHTML = htmlText
 }
@@ -108,10 +112,19 @@ function sendResult () {
   const aWPM = calWPM()
   const aAR = calAccuracyRate()
   const aComment = giveComment(aWPM, aAR)
-  document.getElementById('wpm-input').value = aWPM
-  document.getElementById('ar-input').value = aAR
-  document.getElementById('comment-input').value = aComment
-  document.getElementById('single-record-submit').click()
+  if (document.getElementById('submit-result') && !(document.getElementById('testText'))) {
+    sessionStorage.setItem('wpm', aWPM)
+    sessionStorage.setItem('ar', aAR)
+    sessionStorage.setItem('comment', aComment)
+    document.getElementById('wpm-input').value = aWPM
+    document.getElementById('ar-input').value = aAR
+    document.getElementById('comment-input').value = aComment
+    document.getElementById('single-record-submit').click()
+    return
+  }
+  WPM.textContent = aWPM
+  AR.textContent = aAR
+  comment.textContent = aComment
 }
 function setTimer () {
   timerID = setInterval(function () {
@@ -139,9 +152,11 @@ function reset () {
   keydownTimes = 0
 }
 function switchText () {
+  typeAllowed = false
   axios.get('https://random-word-api.vercel.app/api?words=100')
     .then(response => {
       text2HTML(response.data)
+      typeAllowed = true
     })
     .catch(() => {
       spareTextIndex = 1 - spareTextIndex
@@ -149,7 +164,10 @@ function switchText () {
     })
 }
 
-document.addEventListener('keydown', typeAChar)
+document.addEventListener('keydown', e => {
+  if (!(comment.textContent === '' && typeAllowed)) return
+  typeAChar(e)
+})
 resetBtn.addEventListener('click', () => {
   resetBtn.blur()
   reset()
@@ -159,4 +177,39 @@ switchBtn.addEventListener('click', () => {
   reset()
   switchText()
 })
-text2HTML('Try typing the sentences here, then press a random key when finished. You can change the text with the "switch text" button below.')
+
+if (!sessionStorage.getItem('visited')) {
+  greetingModal.addEventListener('show.bs.modal', function greetingStart () {
+    typeAllowed = false
+    sessionStorage.setItem('visited', true)
+
+    greetingModal.addEventListener('hidden.bs.modal', function greetingEnd () {
+      typeAllowed = true
+      greetingModal.removeEventListener('show.bs.modal', greetingStart)
+      greetingModal.removeEventListener('hidden.bs.modal', greetingEnd)
+    })
+  })
+}
+if (!sessionStorage.getItem('played')) {
+  instructionModal.addEventListener('shown.bs.modal', function instructionStart () {
+    typeAllowed = false
+    sessionStorage.setItem('played', true)
+
+    instructionModal.addEventListener('hidden.bs.modal', function instructionEnd () {
+      typeAllowed = true
+      instructionModal.removeEventListener('shown.bs.modal', instructionStart)
+      instructionModal.removeEventListener('hidden.bs.modal', instructionEnd)
+    })
+  })
+}
+if (sessionStorage.getItem('wpm')) {
+  WPM.textContent = sessionStorage.getItem('wpm')
+  AR.textContent = sessionStorage.getItem('ar')
+  comment.textContent = sessionStorage.getItem('comment')
+  sessionStorage.removeItem('wpm')
+  sessionStorage.removeItem('ar')
+  sessionStorage.removeItem('comment')
+  switchText()
+} else {
+  text2HTML('Try typing the sentences here, then press a random key when finished. You can change the text with the "switch text" button below.')
+}
